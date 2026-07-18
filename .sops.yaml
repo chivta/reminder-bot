@@ -1,4 +1,8 @@
 creation_rules:
   - path_regex: k8s/secrets/.*\.enc\.yaml$
     encrypted_regex: ^(data|stringData)$
-    age: age1sh4gkd6vtq97pl0fwc43mfq5sh5f0a92t2zm8ktk5h3fln0cs43qfpgm3t
+    # Recipients: local dev key (~/.config/sops/age/keys.txt) + homelab
+    # cluster key (flux kustomize-controller, secret infra-sops-age).
+    age: >-
+      age1sh4gkd6vtq97pl0fwc43mfq5sh5f0a92t2zm8ktk5h3fln0cs43qfpgm3t,
+      age1nrfs0cgysk6tpxq04l2yzhgm9edaklqsfmfdfzftrq8phx5hrgqq3ax5qq

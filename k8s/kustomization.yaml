@@ -4,6 +4,9 @@ kind: Kustomization
 namespace: reminder-bot
 
 resources:
+  - namespace.yaml
   - postgres/statefulset.yaml
   - bot/deployment.yaml
   - reminder/cronjobs.yaml
+  - secrets/app-secrets.enc.yaml
+  - secrets/ghcr-secret.enc.yaml

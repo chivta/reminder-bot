@@ -24,31 +24,31 @@ Secrets are encrypted with [sops](https://github.com/getsops/sops) using an
 [age](https://github.com/FiloSottile/age) key, and the encrypted files
 (`k8s/secrets/*.enc.yaml`) are committed to the repo.
 
-- The age private key lives at `~/.config/sops/age/keys.txt`. **Back this key
-  up somewhere safe** — if it's lost, the secrets in this repo cannot be
-  decrypted or rotated.
-- To edit a secret in place:
+Each file is encrypted for two age recipients:
 
-  ```bash
-  sops edit k8s/secrets/app-secrets.enc.yaml
-  ```
+- the local dev key at `~/.config/sops/age/keys.txt` — **back this key up
+  somewhere safe**; it is what lets you edit the secrets on this machine;
+- the homelab cluster key (Flux's kustomize-controller decrypts the secrets
+  in-cluster using the `infra-sops-age` secret in `flux-system`).
 
-- To apply the secrets to the currently configured cluster:
-
-  ```bash
-  ./apply-secrets.sh
-  ```
-
-## Deployment
-
-Manifests live under `k8s/` and are applied with kustomize:
+To edit a secret in place:
 
 ```bash
-kubectl apply -k k8s/
+sops edit k8s/secrets/app-secrets.enc.yaml
 ```
 
-Apply secrets separately (they're intentionally not part of the kustomize
-resource list — see `apply-secrets.sh` above) before or after the manifests.
+After adding or removing a recipient in `.sops.yaml`, re-encrypt with
+`sops updatekeys k8s/secrets/<file>.enc.yaml`.
+
+## Deployment (GitOps via Flux)
+
+The homelab repo (`clusters/main/apps/reminder-bot/`) points Flux at this
+repo: a `GitRepository` watches `main` and a `Kustomization` applies `./k8s`
+— namespace, workloads, and the sops-encrypted secrets, which Flux decrypts
+in-cluster. Nothing is applied by hand; pushing to `main` is the deployment.
 
 CD builds and pushes the image to `ghcr.io/chivta/reminder-bot` on every push
 to `main`, after the build/vet/test job passes.
+
+For a manual apply (e.g. a cluster without Flux), decrypt the secrets
+yourself — `kubectl apply -k k8s/` alone would apply them still encrypted.
