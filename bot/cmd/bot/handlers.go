@@ -11,8 +11,8 @@ import (
 
 const (
 	introMessage = "Send me anything you want to read later — a link, an article, a message, " +
-		"a photo, whatever. I'll save it and remind you every morning and evening until " +
-		"you mark it done with the ✅ Done button."
+		"a photo, whatever. I'll save it and, once it's at least 6 hours old, remind you " +
+		"about it every hour — oldest first — until you mark it done with the ✅ Done button."
 	savedMessage  = "Saved ⏰ I'll remind you until you mark it done."
 	genericError  = "Something went wrong. Please try again."
 	ackDoneText   = "Done ✅"

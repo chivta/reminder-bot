@@ -1,13 +1,12 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: reminder-morning
+  name: reminder
   namespace: reminder-bot
   labels:
-    app: reminder-morning
+    app: reminder
 spec:
-  schedule: "0 9 * * *"
-  timeZone: "Europe/Kyiv"
+  schedule: "0 * * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
@@ -17,50 +16,7 @@ spec:
       template:
         metadata:
           labels:
-            app: reminder-morning
-        spec:
-          restartPolicy: OnFailure
-          imagePullSecrets:
-            - name: ghcr-secret
-          containers:
-            - name: reminder
-              image: ghcr.io/chivta/reminder-bot:latest
-              command: ["./reminder"]
-              envFrom:
-                - secretRef:
-                    name: app-secrets
-              env:
-                - name: REMIND_URL
-                  value: "http://bot-svc:8080/remind"
-              resources:
-                requests:
-                  cpu: 100m
-                  memory: 128Mi
-                limits:
-                  cpu: 500m
-                  memory: 256Mi
-
----
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: reminder-evening
-  namespace: reminder-bot
-  labels:
-    app: reminder-evening
-spec:
-  schedule: "0 23 * * *"
-  timeZone: "Europe/Kyiv"
-  concurrencyPolicy: Forbid
-  successfulJobsHistoryLimit: 3
-  failedJobsHistoryLimit: 3
-  jobTemplate:
-    spec:
-      backoffLimit: 3
-      template:
-        metadata:
-          labels:
-            app: reminder-evening
+            app: reminder
         spec:
           restartPolicy: OnFailure
           imagePullSecrets:

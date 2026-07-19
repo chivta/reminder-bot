@@ -20,6 +20,10 @@ const (
 	// pass, to stay within Telegram's rate limits.
 	remindSendDelay = 100 * time.Millisecond
 
+	// minRemindAge is how old a saved message must be before the bot starts
+	// reminding about it.
+	minRemindAge = 6 * time.Hour
+
 	// httpShutdownTimeout bounds how long we wait for in-flight HTTP requests
 	// to drain during graceful shutdown.
 	httpShutdownTimeout = 10 * time.Second

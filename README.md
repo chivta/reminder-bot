@@ -1,8 +1,9 @@
 # reminder-bot
 
 A Telegram "read-it-later" bot: send it a message and it saves it, then reminds
-you about it at 09:00 and 23:00 (Europe/Kyiv) until you acknowledge it with the
-"✅ Done" button.
+you about it until you acknowledge it with the "✅ Done" button. Reminders run
+every hour and re-send your single oldest unacknowledged message — but only
+once it is at least 6 hours old, so fresh saves don't come straight back.
 
 ## Local development
 
