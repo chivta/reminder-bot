@@ -19,8 +19,6 @@ spec:
             app: reminder
         spec:
           restartPolicy: OnFailure
-          imagePullSecrets:
-            - name: ghcr-secret
           containers:
             - name: reminder
               image: ghcr.io/chivta/reminder-bot:latest
